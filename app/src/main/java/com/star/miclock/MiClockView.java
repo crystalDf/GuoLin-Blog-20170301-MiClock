@@ -33,6 +33,11 @@ public class MiClockView extends View {
 
     private int mRadius;
 
+    private float mDefaultPadding;
+    private float mPaddingLeft;
+    private float mPaddingTop;
+    private float mPaddingRight;
+    private float mPaddingBottom;
 
     public MiClockView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
@@ -114,5 +119,7 @@ public class MiClockView extends View {
 
         mRadius = Math.min(w - getPaddingLeft() - getPaddingRight(),
                 h - getPaddingTop() - getPaddingBottom()) / 2;
+
+        mDefaultPadding = PADDING_RATIO * mRadius;
     }
 }
