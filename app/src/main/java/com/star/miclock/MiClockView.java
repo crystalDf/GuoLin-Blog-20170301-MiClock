@@ -122,9 +122,9 @@ public class MiClockView extends View {
 
         mDefaultPadding = PADDING_RATIO * mRadius;
 
-        mPaddingLeft = getPaddingLeft();
+        mPaddingLeft = mDefaultPadding + getPaddingLeft();
         mPaddingRight = mPaddingLeft;
-        mPaddingTop = getPaddingTop();
+        mPaddingTop = mDefaultPadding + getPaddingTop();
         mPaddingBottom = mPaddingTop;
     }
 }
