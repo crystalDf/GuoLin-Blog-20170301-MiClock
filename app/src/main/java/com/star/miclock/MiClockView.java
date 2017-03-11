@@ -39,6 +39,8 @@ public class MiClockView extends View {
     private float mPaddingRight;
     private float mPaddingBottom;
 
+    private float mScaleLength;
+
     public MiClockView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
@@ -126,5 +128,7 @@ public class MiClockView extends View {
         mPaddingRight = mPaddingLeft;
         mPaddingTop = mDefaultPadding + getPaddingTop();
         mPaddingBottom = mPaddingTop;
+
+        mScaleLength = PADDING_RATIO * mRadius;
     }
 }
