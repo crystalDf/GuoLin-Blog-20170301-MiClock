@@ -130,5 +130,6 @@ public class MiClockView extends View {
         mPaddingBottom = mPaddingTop;
 
         mScaleLength = PADDING_RATIO * mRadius;
+        mScaleArcPaint.setStrokeWidth(mScaleLength);
     }
 }
