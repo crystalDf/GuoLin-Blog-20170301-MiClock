@@ -2,8 +2,11 @@ package com.star.miclock;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.Color;
+import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Rect;
+import android.graphics.SweepGradient;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -15,6 +18,9 @@ public class MiClockView extends View {
 
     private static final float PADDING_RATIO = 0.12f;
 
+    private float SWEEP_GRADIENT_START = 0.75f;
+    private float SWEEP_GRADIENT_END = 1;
+
     private int mBackgroundColor;
     private int mLightColor;
     private int mDarkColor;
@@ -24,6 +30,7 @@ public class MiClockView extends View {
     private Paint mMinuteHandPaint;
     private Paint mSecondHandPaint;
 
+    private float mScaleLineLength;
     private Paint mScaleLinePaint;
     private Paint mScaleArcPaint;
 
@@ -39,20 +46,24 @@ public class MiClockView extends View {
     private float mPaddingRight;
     private float mPaddingBottom;
 
-    private float mScaleLength;
+    private SweepGradient mSweepGradient;
 
-    public MiClockView(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
+    private Canvas mCanvas;
+
+    private Rect mTextRect;
+
+    public MiClockView(Context context, AttributeSet attrs) {
+        super(context, attrs);
 
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.MiClockView,
-                defStyleAttr, 0);
+                0, 0);
 
         mBackgroundColor = typedArray.getColor(R.styleable.MiClockView_backgroundColor,
-                Color.parseColor("#237EAD"));
-        mLightColor = typedArray.getColor(R.styleable.MiClockView_lightColor,
-                Color.parseColor("#FFFFFF"));
+                ContextCompat.getColor(context, R.color.colorBackground));
         mDarkColor = typedArray.getColor(R.styleable.MiClockView_darkColor,
-                Color.parseColor("#80FFFFFF"));
+                ContextCompat.getColor(context, R.color.colorDark));
+        mLightColor = typedArray.getColor(R.styleable.MiClockView_lightColor,
+                ContextCompat.getColor(context, R.color.colorLight));
         mTextSize = typedArray.getDimension(R.styleable.MiClockView_textSize,
                 DensityUtils.sp2px(context, 14));
 
@@ -87,6 +98,8 @@ public class MiClockView extends View {
         mCirclePaint.setStyle(Paint.Style.STROKE);
         mCirclePaint.setColor(mDarkColor);
         mCirclePaint.setStrokeWidth(CIRCLE_STROKE_WIDTH);
+
+        mTextRect = new Rect();
     }
 
     @Override
@@ -125,11 +138,42 @@ public class MiClockView extends View {
         mDefaultPadding = PADDING_RATIO * mRadius;
 
         mPaddingLeft = mDefaultPadding + getPaddingLeft();
-        mPaddingRight = mPaddingLeft;
         mPaddingTop = mDefaultPadding + getPaddingTop();
+        mPaddingRight = mPaddingLeft;
         mPaddingBottom = mPaddingTop;
 
-        mScaleLength = PADDING_RATIO * mRadius;
-        mScaleArcPaint.setStrokeWidth(mScaleLength);
+        mScaleLineLength = mRadius * PADDING_RATIO;
+        mScaleArcPaint.setStrokeWidth(mScaleLineLength);
+        mScaleLinePaint.setStrokeWidth(mRadius * PADDING_RATIO * PADDING_RATIO);
+
+        mSweepGradient = new SweepGradient(w / 2, h / 2,
+                new int[] {mDarkColor, mLightColor},
+                new float[] {SWEEP_GRADIENT_START, SWEEP_GRADIENT_END});
+    }
+
+    @Override
+    protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+
+        mCanvas = canvas;
+
+        drawTimeText();
+    }
+
+    private void drawTimeText() {
+
+        for (int i = 0; i < 4; i++) {
+            String timeText = (i + 1) * 3 + "";
+
+            mTextPaint.getTextBounds(timeText, 0, timeText.length(), mTextRect);
+
+            float centerX = (float) (getWidth() / 2 +
+                    Math.cos(i * Math.PI / 2) * (mRadius - mDefaultPadding));
+            float centerY = (float) (getHeight() / 2 +
+                    Math.sin(i * Math.PI / 2) * (mRadius - mDefaultPadding));
+
+            mCanvas.drawText(timeText, centerX - mTextRect.width() / 2,
+                    centerY - mTextRect.height() / 2, mTextPaint);
+        }
     }
 }
