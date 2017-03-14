@@ -5,6 +5,7 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.RectF;
 import android.graphics.SweepGradient;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
@@ -20,6 +21,8 @@ public class MiClockView extends View {
 
     private float SWEEP_GRADIENT_START = 0.75f;
     private float SWEEP_GRADIENT_END = 1;
+
+    private float ARC_INTERVAL = 5;
 
     private int mBackgroundColor;
     private int mLightColor;
@@ -51,6 +54,7 @@ public class MiClockView extends View {
     private Canvas mCanvas;
 
     private Rect mTextRect;
+    private RectF mCircleRectF;
 
     public MiClockView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -100,6 +104,7 @@ public class MiClockView extends View {
         mCirclePaint.setStrokeWidth(CIRCLE_STROKE_WIDTH);
 
         mTextRect = new Rect();
+        mCircleRectF = new RectF();
     }
 
     @Override
@@ -162,6 +167,11 @@ public class MiClockView extends View {
 
     private void drawTimeText() {
 
+        mCircleRectF.set(mPaddingLeft + CIRCLE_STROKE_WIDTH / 2,
+                mPaddingTop + CIRCLE_STROKE_WIDTH / 2,
+                getWidth() - mPaddingRight  - CIRCLE_STROKE_WIDTH / 2,
+                getHeight() - mPaddingBottom  - CIRCLE_STROKE_WIDTH / 2);
+
         for (int i = 0; i < 4; i++) {
             String timeText = (i + 1) * 3 + "";
 
@@ -173,7 +183,10 @@ public class MiClockView extends View {
                     Math.sin(i * Math.PI / 2) * (mRadius - mDefaultPadding));
 
             mCanvas.drawText(timeText, centerX - mTextRect.width() / 2,
-                    centerY - mTextRect.height() / 2, mTextPaint);
+                    centerY + mTextRect.height() / 2, mTextPaint);
+
+            mCanvas.drawArc(mCircleRectF, ARC_INTERVAL + 90 * i, 90 - 2 * ARC_INTERVAL, false,
+                    mCirclePaint);
         }
     }
 }
