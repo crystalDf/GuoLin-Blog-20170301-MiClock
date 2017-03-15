@@ -189,4 +189,8 @@ public class MiClockView extends View {
                     mCirclePaint);
         }
     }
+
+    private void drawScaleLine() {
+
+    }
 }
