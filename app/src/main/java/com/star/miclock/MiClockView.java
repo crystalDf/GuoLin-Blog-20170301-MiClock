@@ -3,6 +3,7 @@ package com.star.miclock;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
@@ -11,6 +12,8 @@ import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.View;
 
+import java.util.Calendar;
+
 
 public class MiClockView extends View {
 
@@ -18,6 +21,11 @@ public class MiClockView extends View {
     private static final int DEFAULT_MEASURED_DIMENSION = 800;
 
     private static final float PADDING_RATIO = 0.12f;
+
+    private static final float CIRCLE_START_DEGREE = 0;
+    private static final float CIRCLE_END_DEGREE = 360;
+
+    private static final int SCALE_LINE_COUNT = 200;
 
     private float SWEEP_GRADIENT_START = 0.75f;
     private float SWEEP_GRADIENT_END = 1;
@@ -50,11 +58,17 @@ public class MiClockView extends View {
     private float mPaddingBottom;
 
     private SweepGradient mSweepGradient;
+    private Matrix mGradientMatrix;
 
     private Canvas mCanvas;
 
     private Rect mTextRect;
     private RectF mCircleRectF;
+    private RectF mScaleArcRectF;
+
+    private float mSecondDegree;
+    private float mMinuteDegree;
+    private float mHourDegree;
 
     public MiClockView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -105,6 +119,10 @@ public class MiClockView extends View {
 
         mTextRect = new Rect();
         mCircleRectF = new RectF();
+        mScaleArcRectF = new RectF();
+
+        mGradientMatrix = new Matrix();
+
     }
 
     @Override
@@ -162,7 +180,23 @@ public class MiClockView extends View {
 
         mCanvas = canvas;
 
+        getTimeDegree();
         drawTimeText();
+        drawScaleLine();
+    }
+
+    private void getTimeDegree() {
+
+        Calendar calendar = Calendar.getInstance();
+
+        float milliSecond = calendar.get(Calendar.MILLISECOND);
+        float mSecond = calendar.get(Calendar.SECOND) + milliSecond / 1000;
+        float mMinute = calendar.get(Calendar.MINUTE) + mSecond / 60;
+        float mHour = calendar.get(Calendar.HOUR) + mMinute / 60;
+
+        mSecondDegree = mSecond / 60 * 360;
+        mMinuteDegree = mMinute / 60 * 360;
+        mHourDegree = mHour / 12 * 360;
     }
 
     private void drawTimeText() {
@@ -192,5 +226,26 @@ public class MiClockView extends View {
 
     private void drawScaleLine() {
 
+        mCanvas.save();
+
+        mScaleArcRectF.set(mPaddingLeft + mScaleLineLength,
+                mPaddingTop + mScaleLineLength,
+                getWidth() - mPaddingRight  - mScaleLineLength,
+                getHeight() - mPaddingBottom  - mScaleLineLength);
+
+        mGradientMatrix.setRotate(mSecondDegree - 90, getWidth() / 2, getHeight() / 2);
+        mSweepGradient.setLocalMatrix(mGradientMatrix);
+        mScaleArcPaint.setShader(mSweepGradient);
+
+        mCanvas.drawArc(mScaleArcRectF, CIRCLE_START_DEGREE, CIRCLE_END_DEGREE, false,
+                mScaleArcPaint);
+
+        for (int i = 0; i < SCALE_LINE_COUNT; i++) {
+            mCanvas.drawLine(getWidth() / 2, mPaddingTop + mScaleLineLength,
+                    getWidth() / 2, mPaddingTop + 2 * mScaleLineLength, mScaleLinePaint);
+            mCanvas.rotate(CIRCLE_END_DEGREE / SCALE_LINE_COUNT);
+        }
+
+        mCanvas.restore();
     }
 }
