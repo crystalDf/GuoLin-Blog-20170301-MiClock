@@ -167,7 +167,7 @@ public class MiClockView extends View {
 
         mScaleLineLength = mRadius * PADDING_RATIO;
         mScaleArcPaint.setStrokeWidth(mScaleLineLength);
-        mScaleLinePaint.setStrokeWidth(mRadius * PADDING_RATIO * PADDING_RATIO);
+        mScaleLinePaint.setStrokeWidth(mRadius * PADDING_RATIO * PADDING_RATIO / 2);
 
         mSweepGradient = new SweepGradient(w / 2, h / 2,
                 new int[] {mDarkColor, mLightColor},
@@ -241,9 +241,10 @@ public class MiClockView extends View {
                 mScaleArcPaint);
 
         for (int i = 0; i < SCALE_LINE_COUNT; i++) {
-            mCanvas.drawLine(getWidth() / 2, mPaddingTop + mScaleLineLength,
-                    getWidth() / 2, mPaddingTop + 2 * mScaleLineLength, mScaleLinePaint);
-            mCanvas.rotate(CIRCLE_END_DEGREE / SCALE_LINE_COUNT);
+            mCanvas.drawLine(getWidth() / 2, (float) (mPaddingTop + 0.5 * mScaleLineLength),
+                    getWidth() / 2, (float) (mPaddingTop + 1.5 * mScaleLineLength),
+                    mScaleLinePaint);
+            mCanvas.rotate(CIRCLE_END_DEGREE / SCALE_LINE_COUNT, getWidth() / 2, getHeight() / 2);
         }
 
         mCanvas.restore();
