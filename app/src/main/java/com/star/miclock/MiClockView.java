@@ -249,4 +249,8 @@ public class MiClockView extends View {
 
         mCanvas.restore();
     }
+
+    private void drawSecondHand() {
+
+    }
 }
