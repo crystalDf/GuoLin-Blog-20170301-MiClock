@@ -5,6 +5,7 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.Path;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.SweepGradient;
@@ -70,6 +71,8 @@ public class MiClockView extends View {
     private float mMinuteDegree;
     private float mHourDegree;
 
+    private Path mSecondHandPath;
+
     public MiClockView(Context context, AttributeSet attrs) {
         super(context, attrs);
 
@@ -122,6 +125,8 @@ public class MiClockView extends View {
         mScaleArcRectF = new RectF();
 
         mGradientMatrix = new Matrix();
+
+        mSecondHandPath = new Path();
 
     }
 
@@ -183,6 +188,7 @@ public class MiClockView extends View {
         getTimeDegree();
         drawTimeText();
         drawScaleLine();
+        drawSecondHand();
     }
 
     private void getTimeDegree() {
@@ -252,5 +258,23 @@ public class MiClockView extends View {
 
     private void drawSecondHand() {
 
+        mCanvas.save();
+
+        mCanvas.rotate(mSecondDegree, getWidth() / 2, getHeight() / 2);
+
+        mSecondHandPath.reset();
+
+        float offset = mPaddingTop;
+
+        mSecondHandPath.moveTo(getWidth() / 2, offset + 0.27f * mRadius);
+        mSecondHandPath.lineTo(getWidth() / 2 - 0.05f * mRadius, offset + 0.35f * mRadius);
+        mSecondHandPath.lineTo(getWidth() / 2 + 0.05f * mRadius, offset + 0.35f * mRadius);
+        mSecondHandPath.close();
+
+        mSecondHandPaint.setColor(mLightColor);
+
+        mCanvas.drawPath(mSecondHandPath, mSecondHandPaint);
+
+        mCanvas.restore();
     }
 }
