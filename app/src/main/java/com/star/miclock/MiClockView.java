@@ -72,6 +72,8 @@ public class MiClockView extends View {
     private float mHourDegree;
 
     private Path mSecondHandPath;
+    private Path mMinuteHandPath;
+    private Path mHourHandPath;
 
     public MiClockView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -127,7 +129,8 @@ public class MiClockView extends View {
         mGradientMatrix = new Matrix();
 
         mSecondHandPath = new Path();
-
+        mMinuteHandPath = new Path();
+        mHourHandPath = new Path();
     }
 
     @Override
@@ -271,9 +274,33 @@ public class MiClockView extends View {
         mSecondHandPath.lineTo(getWidth() / 2 + 0.05f * mRadius, offset + 0.35f * mRadius);
         mSecondHandPath.close();
 
-        mSecondHandPaint.setColor(mLightColor);
-
         mCanvas.drawPath(mSecondHandPath, mSecondHandPaint);
+
+        mCanvas.restore();
+    }
+
+    private void drawMinuteHand() {
+
+    }
+
+    private void drawHourHand() {
+
+        mCanvas.save();
+
+        mCanvas.rotate(mHourDegree, getWidth() / 2, getHeight() / 2);
+
+        mHourHandPath.reset();
+
+        float offset = mPaddingTop;
+
+        mHourHandPath.moveTo(getWidth() / 2 - 0.02f * mRadius, getHeight() / 2);
+        mHourHandPath.lineTo(getWidth() / 2 - 0.01f * mRadius, offset + 0.5f * mRadius);
+        mHourHandPath.quadTo(getWidth() / 2, offset + 0.48f * mRadius,
+                getWidth() / 2 + 0.01f * mRadius, offset + 0.5f * mRadius);
+        mHourHandPath.lineTo(getWidth() / 2 + 0.02f * mRadius, getHeight() / 2);
+        mHourHandPath.close();
+
+        mCanvas.drawPath(mHourHandPath, mHourHandPaint);
 
         mCanvas.restore();
     }
