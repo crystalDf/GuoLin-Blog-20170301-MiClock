@@ -281,6 +281,24 @@ public class MiClockView extends View {
 
     private void drawMinuteHand() {
 
+        mCanvas.save();
+
+        mCanvas.rotate(mMinuteDegree, getWidth() / 2, getHeight() / 2);
+
+        mMinuteHandPath.reset();
+
+        float offset = mPaddingTop;
+
+        mMinuteHandPath.moveTo(getWidth() / 2 - 0.01f * mRadius, getHeight() / 2);
+        mMinuteHandPath.lineTo(getWidth() / 2 - 0.008f * mRadius, offset + 0.38f * mRadius);
+        mMinuteHandPath.quadTo(getWidth() / 2, offset + 0.36f * mRadius,
+                getWidth() / 2 + 0.008f * mRadius, offset + 0.38f * mRadius);
+        mMinuteHandPath.lineTo(getWidth() / 2 + 0.01f * mRadius, getHeight() / 2);
+        mMinuteHandPath.close();
+
+        mCanvas.drawPath(mMinuteHandPath, mMinuteHandPaint);
+
+        mCanvas.restore();
     }
 
     private void drawHourHand() {
