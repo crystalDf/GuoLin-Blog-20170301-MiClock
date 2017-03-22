@@ -191,6 +191,8 @@ public class MiClockView extends View {
         getTimeDegree();
         drawTimeText();
         drawScaleLine();
+        drawHourHand();
+        drawMinuteHand();
         drawSecondHand();
     }
 
