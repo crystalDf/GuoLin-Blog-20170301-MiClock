@@ -194,6 +194,7 @@ public class MiClockView extends View {
         drawHourHand();
         drawMinuteHand();
         drawSecondHand();
+        drawCoverCircle();
     }
 
     private void getTimeDegree() {
@@ -327,5 +328,8 @@ public class MiClockView extends View {
 
     private void drawCoverCircle() {
 
+        mCanvas.drawCircle(getWidth() / 2, getHeight() / 2, 0.05f * mRadius, mSecondHandPaint);
+        mSecondHandPaint.setColor(mBackgroundColor);
+        mCanvas.drawCircle(getWidth() / 2, getHeight() / 2, 0.025f * mRadius, mSecondHandPaint);
     }
 }
