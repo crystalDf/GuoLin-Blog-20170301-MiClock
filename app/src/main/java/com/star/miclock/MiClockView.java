@@ -49,6 +49,7 @@ public class MiClockView extends View {
     private Paint mTextPaint;
 
     private Paint mCirclePaint;
+    private Paint mCoverCirclePaint;
 
     private int mRadius;
 
@@ -121,6 +122,9 @@ public class MiClockView extends View {
         mCirclePaint.setStyle(Paint.Style.STROKE);
         mCirclePaint.setColor(mDarkColor);
         mCirclePaint.setStrokeWidth(CIRCLE_STROKE_WIDTH);
+
+        mCoverCirclePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mCoverCirclePaint.setStyle(Paint.Style.FILL);
 
         mTextRect = new Rect();
         mCircleRectF = new RectF();
@@ -195,6 +199,8 @@ public class MiClockView extends View {
         drawMinuteHand();
         drawSecondHand();
         drawCoverCircle();
+
+        invalidate();
     }
 
     private void getTimeDegree() {
@@ -328,8 +334,10 @@ public class MiClockView extends View {
 
     private void drawCoverCircle() {
 
-        mCanvas.drawCircle(getWidth() / 2, getHeight() / 2, 0.05f * mRadius, mSecondHandPaint);
-        mSecondHandPaint.setColor(mBackgroundColor);
-        mCanvas.drawCircle(getWidth() / 2, getHeight() / 2, 0.025f * mRadius, mSecondHandPaint);
+        mCoverCirclePaint.setColor(mLightColor);
+        mCanvas.drawCircle(getWidth() / 2, getHeight() / 2, 0.05f * mRadius, mCoverCirclePaint);
+
+        mCoverCirclePaint.setColor(mBackgroundColor);
+        mCanvas.drawCircle(getWidth() / 2, getHeight() / 2, 0.025f * mRadius, mCoverCirclePaint);
     }
 }
