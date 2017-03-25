@@ -340,4 +340,8 @@ public class MiClockView extends View {
         mCoverCirclePaint.setColor(mBackgroundColor);
         mCanvas.drawCircle(getWidth() / 2, getHeight() / 2, 0.025f * mRadius, mCoverCirclePaint);
     }
+
+    private void setCameraRotate(float rotateX, float rotateY) {
+
+    }
 }
