@@ -2,6 +2,7 @@ package com.star.miclock;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Camera;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
@@ -76,6 +77,9 @@ public class MiClockView extends View {
     private Path mMinuteHandPath;
     private Path mHourHandPath;
 
+    private Matrix mCameraMatrix;
+    private Camera mCamera;
+
     public MiClockView(Context context, AttributeSet attrs) {
         super(context, attrs);
 
@@ -135,6 +139,9 @@ public class MiClockView extends View {
         mSecondHandPath = new Path();
         mMinuteHandPath = new Path();
         mHourHandPath = new Path();
+
+        mCameraMatrix = new Matrix();
+        mCamera = new Camera();
     }
 
     @Override
