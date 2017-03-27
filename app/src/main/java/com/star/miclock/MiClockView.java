@@ -80,6 +80,9 @@ public class MiClockView extends View {
     private Matrix mCameraMatrix;
     private Camera mCamera;
 
+    private float mCameraRotateX;
+    private float mCameraRotateY;
+
     public MiClockView(Context context, AttributeSet attrs) {
         super(context, attrs);
 
@@ -348,7 +351,23 @@ public class MiClockView extends View {
         mCanvas.drawCircle(getWidth() / 2, getHeight() / 2, 0.025f * mRadius, mCoverCirclePaint);
     }
 
-    private void setCameraRotate(float rotateX, float rotateY) {
+    private void setCameraRotate() {
+
+        mCameraMatrix.reset();
+
+        mCamera.save();
+        mCamera.rotateX(mCameraRotateX);
+        mCamera.rotateY(mCameraRotateY);
+        mCamera.getMatrix(mCameraMatrix);
+        mCamera.restore();
+
+        mCameraMatrix.preTranslate(-getWidth() / 2, -getHeight() / 2);
+        mCameraMatrix.postTranslate(getWidth() / 2, getHeight() / 2);
+
+        mCanvas.concat(mCameraMatrix);
+    }
+
+    private void getCameraRotate() {
 
     }
 }
