@@ -12,6 +12,7 @@ import android.graphics.RectF;
 import android.graphics.SweepGradient;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.View;
 
 import java.util.Calendar;
@@ -367,7 +368,9 @@ public class MiClockView extends View {
         mCanvas.concat(mCameraMatrix);
     }
 
-    private void getCameraRotate() {
+    private void getCameraRotate(MotionEvent event) {
 
+        float rotateX = -(event.getY() - getHeight() / 2);
+        float rotateY = event.getX() - getWidth() / 2;
     }
 }
