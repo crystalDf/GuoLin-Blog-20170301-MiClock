@@ -373,4 +373,10 @@ public class MiClockView extends View {
         float rotateX = -(event.getY() - getHeight() / 2);
         float rotateY = event.getX() - getWidth() / 2;
     }
+
+    private float[] getPercent(float x, float y) {
+        float percentArr[] = new float[2];
+
+        return percentArr;
+    }
 }
