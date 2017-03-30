@@ -375,7 +375,17 @@ public class MiClockView extends View {
     }
 
     private float[] getPercent(float x, float y) {
+
         float percentArr[] = new float[2];
+
+        float percentX = x / mRadius;
+        float percentY = y / mRadius;
+
+        percentX = Math.max(Math.min(percentX, 1), -1);
+        percentY = Math.max(Math.min(percentY, 1), -1);
+
+        percentArr[0] = percentX;
+        percentArr[1] = percentY;
 
         return percentArr;
     }
