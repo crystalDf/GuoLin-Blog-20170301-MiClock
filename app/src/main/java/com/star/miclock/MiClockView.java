@@ -30,10 +30,12 @@ public class MiClockView extends View {
 
     private static final int SCALE_LINE_COUNT = 200;
 
-    private float SWEEP_GRADIENT_START = 0.75f;
-    private float SWEEP_GRADIENT_END = 1;
+    private static final float SWEEP_GRADIENT_START = 0.75f;
+    private static final float SWEEP_GRADIENT_END = 1;
 
-    private float ARC_INTERVAL = 5;
+    private static final float ARC_INTERVAL = 5;
+
+    private static final int MAX_CAMERA_ROTATE = 10;
 
     private int mBackgroundColor;
     private int mLightColor;
@@ -372,11 +374,16 @@ public class MiClockView extends View {
 
         float rotateX = -(event.getY() - getHeight() / 2);
         float rotateY = event.getX() - getWidth() / 2;
+
+        float[] percentArr = getPercent(rotateX, rotateY);
+
+        mCameraRotateX = percentArr[0] * MAX_CAMERA_ROTATE;
+        mCameraRotateY = percentArr[1] * MAX_CAMERA_ROTATE;
     }
 
     private float[] getPercent(float x, float y) {
 
-        float percentArr[] = new float[2];
+        float[] percentArr = new float[2];
 
         float percentX = x / mRadius;
         float percentY = y / mRadius;
