@@ -375,25 +375,12 @@ public class MiClockView extends View {
         float rotateX = -(event.getY() - getHeight() / 2);
         float rotateY = event.getX() - getWidth() / 2;
 
-        float[] percentArr = getPercent(rotateX, rotateY);
-
-        mCameraRotateX = percentArr[0] * MAX_CAMERA_ROTATE;
-        mCameraRotateY = percentArr[1] * MAX_CAMERA_ROTATE;
+        mCameraRotateX = getPercent(rotateX) * MAX_CAMERA_ROTATE;
+        mCameraRotateY = getPercent(rotateY) * MAX_CAMERA_ROTATE;
     }
 
-    private float[] getPercent(float x, float y) {
+    private float getPercent(float rotate) {
 
-        float[] percentArr = new float[2];
-
-        float percentX = x / mRadius;
-        float percentY = y / mRadius;
-
-        percentX = Math.max(Math.min(percentX, 1), -1);
-        percentY = Math.max(Math.min(percentY, 1), -1);
-
-        percentArr[0] = percentX;
-        percentArr[1] = percentY;
-
-        return percentArr;
+        return Math.max(Math.min(rotate / mRadius, 1), -1);
     }
 }
