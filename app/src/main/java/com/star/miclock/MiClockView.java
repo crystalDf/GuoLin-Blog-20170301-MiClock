@@ -216,6 +216,11 @@ public class MiClockView extends View {
         invalidate();
     }
 
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        return super.onTouchEvent(event);
+    }
+
     private void getTimeDegree() {
 
         Calendar calendar = Calendar.getInstance();
