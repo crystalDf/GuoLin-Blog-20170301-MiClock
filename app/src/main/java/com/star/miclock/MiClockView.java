@@ -218,7 +218,21 @@ public class MiClockView extends View {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        return super.onTouchEvent(event);
+
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                getCameraRotate(event);
+                break;
+
+            case MotionEvent.ACTION_MOVE:
+                getCameraRotate(event);
+                break;
+
+            case MotionEvent.ACTION_UP:
+                break;
+        }
+
+        return true;
     }
 
     private void getTimeDegree() {
