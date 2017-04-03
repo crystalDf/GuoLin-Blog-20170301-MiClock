@@ -86,6 +86,11 @@ public class MiClockView extends View {
     private float mCameraRotateX;
     private float mCameraRotateY;
 
+    private float mCanvasTranslateX;
+    private float mCanvasTranslateY;
+
+    private float mMaxCanvasTranslate;
+
     public MiClockView(Context context, AttributeSet attrs) {
         super(context, attrs);
 
@@ -197,6 +202,8 @@ public class MiClockView extends View {
         mSweepGradient = new SweepGradient(w / 2, h / 2,
                 new int[] {mDarkColor, mLightColor},
                 new float[] {SWEEP_GRADIENT_START, SWEEP_GRADIENT_END});
+
+        mMaxCanvasTranslate = 0.12f * mRadius;
     }
 
     @Override
@@ -398,8 +405,18 @@ public class MiClockView extends View {
         mCameraRotateY = getPercent(rotateY) * MAX_CAMERA_ROTATE;
     }
 
+    private void getCanvasTranslate(MotionEvent event) {
+
+        float translateX = event.getX() - getWidth() / 2;
+        float translateY = event.getY() - getHeight() / 2;
+
+        mCanvasTranslateX = getPercent(translateX) * mMaxCanvasTranslate;
+        mCanvasTranslateY = getPercent(translateY) * mMaxCanvasTranslate;
+    }
+
     private float getPercent(float rotate) {
 
         return Math.max(Math.min(rotate / mRadius, 1), -1);
     }
+
 }
