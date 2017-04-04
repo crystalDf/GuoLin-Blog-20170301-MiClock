@@ -229,10 +229,12 @@ public class MiClockView extends View {
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 getCameraRotate(event);
+                getCanvasTranslate(event);
                 break;
 
             case MotionEvent.ACTION_MOVE:
                 getCameraRotate(event);
+                getCanvasTranslate(event);
                 break;
 
             case MotionEvent.ACTION_UP:
