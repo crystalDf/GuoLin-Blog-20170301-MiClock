@@ -1,5 +1,6 @@
 package com.star.miclock;
 
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Camera;
@@ -90,6 +91,8 @@ public class MiClockView extends View {
     private float mCanvasTranslateY;
 
     private float mMaxCanvasTranslate;
+
+    private ValueAnimator mValueAnimator;
 
     public MiClockView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -228,6 +231,9 @@ public class MiClockView extends View {
 
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
+                if (mValueAnimator != null && mValueAnimator.isRunning()) {
+                    mValueAnimator.cancel();
+                }
                 getCameraRotate(event);
                 getCanvasTranslate(event);
                 break;
@@ -238,10 +244,14 @@ public class MiClockView extends View {
                 break;
 
             case MotionEvent.ACTION_UP:
+                startValueAnimator();
                 break;
         }
 
         return true;
+    }
+
+    private void startValueAnimator() {
     }
 
     private void getTimeDegree() {
