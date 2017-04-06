@@ -1,5 +1,6 @@
 package com.star.miclock;
 
+import android.animation.PropertyValuesHolder;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -15,6 +16,7 @@ import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.Interpolator;
 
 import java.util.Calendar;
 
@@ -37,6 +39,11 @@ public class MiClockView extends View {
     private static final float ARC_INTERVAL = 5;
 
     private static final int MAX_CAMERA_ROTATE = 10;
+
+    private static final String CAMERA_ROTATE_X = "cameraRotateX";
+    private static final String CAMERA_ROTATE_Y = "cameraRotateY";
+    private static final String CANVAS_TRANSLATE_X = "canvasTranslateX";
+    private static final String CANVAS_TRANSLATE_Y = "canvasTranslateY";
 
     private int mBackgroundColor;
     private int mLightColor;
@@ -215,7 +222,10 @@ public class MiClockView extends View {
 
         mCanvas = canvas;
 
+        setCameraRotate();
+
         getTimeDegree();
+
         drawTimeText();
         drawScaleLine();
         drawHourHand();
@@ -252,6 +262,45 @@ public class MiClockView extends View {
     }
 
     private void startValueAnimator() {
+
+        PropertyValuesHolder cameraRotateXHolder = PropertyValuesHolder.ofFloat(
+                CAMERA_ROTATE_X, mCameraRotateX, 0
+        );
+        PropertyValuesHolder cameraRotateYHolder = PropertyValuesHolder.ofFloat(
+                CAMERA_ROTATE_Y, mCameraRotateY, 0
+        );
+        PropertyValuesHolder canvasTranslateXHolder = PropertyValuesHolder.ofFloat(
+                CANVAS_TRANSLATE_X, mCanvasTranslateX, 0
+        );
+        PropertyValuesHolder canvasTranslateYHolder = PropertyValuesHolder.ofFloat(
+                CANVAS_TRANSLATE_Y, mCanvasTranslateY, 0
+        );
+
+        mValueAnimator = ValueAnimator.ofPropertyValuesHolder(cameraRotateXHolder,
+                cameraRotateYHolder, canvasTranslateXHolder, canvasTranslateYHolder);
+
+        mValueAnimator.setInterpolator(new Interpolator() {
+            @Override
+            public float getInterpolation(float input) {
+                float f = 0.571429f;
+                return (float) (Math.pow(2, -2 * input) *
+                        Math.sin((input - f / 4) * (2 * Math.PI) / f) + 1);
+            }
+        });
+
+        mValueAnimator.setDuration(1000);
+
+        mValueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                mCameraRotateX = (float) animation.getAnimatedValue(CAMERA_ROTATE_X);
+                mCameraRotateY = (float) animation.getAnimatedValue(CAMERA_ROTATE_Y);
+                mCanvasTranslateX = (float) animation.getAnimatedValue(CANVAS_TRANSLATE_X);
+                mCanvasTranslateY = (float) animation.getAnimatedValue(CANVAS_TRANSLATE_Y);
+            }
+        });
+
+        mValueAnimator.start();
     }
 
     private void getTimeDegree() {
