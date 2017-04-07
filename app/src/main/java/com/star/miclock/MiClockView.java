@@ -172,6 +172,7 @@ public class MiClockView extends View {
     }
 
     private int getMeasuredDimension(int size, int measureSpec) {
+
         int result = size;
         int specMode = MeasureSpec.getMode(measureSpec);
         int specSize = MeasureSpec.getSize(measureSpec);
